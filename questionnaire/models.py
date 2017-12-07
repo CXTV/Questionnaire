@@ -91,6 +91,5 @@ class Answer(models.Model):
     val = models.IntegerField(null=True, blank=True)
     content = models.CharField(max_length=255, null=True, blank=True)
 
-
     class Meta:
         verbose_name_plural = "答案"
