@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from questionnaire import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^index/$', views.index),
+    url(r'^add/$', views.add),
+    url(r'^del/$', views.dele),
+    url(r'^edit/(\d+)/$', views.edit),
 ]

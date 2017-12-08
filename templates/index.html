@@ -3,8 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="/static/jquery-3.2.1.min.js"></script>
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <style>
+        .hide{
+{#            添加隐藏#}
+            display: None;
+        }
+    </style>
 </head>
 <body>
-    
+<nav class="navbar">
+    <ol class="breadcrumb">
+        <li><a href="#">平台首页</a></li>
+        <li><a href="#">资产首页</a></li>
+    </ol>
+</nav>
+{% block content %}
+<div class="container">
+    <div class="row col-md-12">
+        <a href="/add"><button class="btn btn-primary">添加</button></a>
+        <table class="table table-bordered">
+         <thead>
+              <tr>
+                  <th><input type="checkbox"></th>
+                  <th>调查问卷名称</th>
+                  <th>问卷调查班级</th>
+                  <th>参与人数</th>
+                  <th>问卷选项</th>
+                  <th>调查地址</th>
+                  <th>查看评分</th>
+                  <th>操作</th>
+              </tr>
+         </thead>
+
+        <tbody>
+            {% for survey in survey_list %}
+                <tr>
+{#                    表格宽度调整#}
+                    <td width="2%"><input type="checkbox" ></td>
+                    <td class="col-md-1">{{ survey.name }}</td>
+                    <td class="col-md-1">{{ survey.que2cls.name}}</td>
+
+                    <td class="col-md-1">{{ survey.question_set.first.answer_set.all.count }}/{{ survey.que2cls.num}}</td>
+                    <td class="col-md-1"><a href="/edit/{{ survey.id }}">编辑问卷</a></td>
+                    <td class="col-md-1"><a>/student/{{ survey.id }}</a></td>
+                    <td class="col-md-1"><a href="">查看评分</a></td>
+                    <td class="col-md-1 del">
+                       <a survey_id="{{ survey.id }}" class="del">删除问卷</a>
+                    </td>
+                </tr>
+              {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+</div>
+{% endblock %}
+<script>
+    $(function () {
+        $('.del').click(function () {
+            $(this).addClass('is_del');
+            console.log(this);
+            var surveyInfoId = $(this).attr("survey_id");
+            $.ajax({
+                url:'/del/',
+                type:'GET',
+                data:{
+                    survey_id:surveyInfoId
+                },
+                success:function (data) {
+                    if(data){
+                        $(".is_del").parent().remove()
+                    }
+                }
+            })
+        })
+    })
+</script>
 </body>
 </html>

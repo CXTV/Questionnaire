@@ -30,6 +30,7 @@ class Student(models.Model):
 class Class(models.Model):
     """班级"""
     name = models.CharField(max_length=32)
+    num = models.IntegerField()
     cls2user = models.ForeignKey(to="UserInfo")
 
     class Meta:
