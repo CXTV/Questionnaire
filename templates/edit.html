@@ -1,27 +1,29 @@
 {% extends 'index.html' %}
 {% block content %}
     <div class="container">
-        <div class="row col-md-10">
+        <div class="row col-md-10 col-md-push-8">
             <a href=""><button class="btn btn-primary">添加</button></a>
             <a href=""><button class="btn btn-primary">完成</button></a>
         </div>
-        <div class="question col-lg-9">
-    <ol>
-        {% for item in form_list %}
-            <li>
-{#            给每个问题添加一个id，方便后面处理#}
-                <div id = {{ item.obj.id }}>
-                    <p>问题名称：{{ item.form.name }}</p>
-                    <p>问题类型：{{ item.form.type }}<a href="#" class="{{ item.option_class }}">添加选项</a></p>
-                    <ul>
-                        {% for i in item.options %}
-                            <li id="{{ i.obj.id }}">{{ i.form }}</li>
-
-                        {% endfor %}
-                    </ul>
-                </div>
-            </li>
-        {% endfor %}
-    </ol>
+        <div class="question col-md-10 col-md-push-2">
+            <div class="row col-md-10 questions" >
+                <ul>
+                    {% for item in form_list %}
+                        <li>
+                        <span class="glyphicon glyphicon-remove pull-right" aria-hidden="true" style="margin:10px 10px 0 0;color: gainsboro"></span>
+            {#            给每个问题添加一个id，方便后面处理#}
+                            <div id = {{ item.obj.id }}>
+                                <p><span>问题名称：</span>{{ item.form.name }}</p>
+                                <p><span>问题类型：</span>{{ item.form.type }}<a href="#" class="{{ item.option_class }}">添加选项</a></p>
+                                <ol>
+                                    {% for i in item.options %}
+                                        <li id="{{ i.obj.id }}">{{ i.form }}</li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
     </div>
 {% endblock %}

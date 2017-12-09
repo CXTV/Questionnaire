@@ -11,6 +11,32 @@
 {#            添加隐藏#}
             display: None;
         }
+
+        ul{
+            padding: 0;
+            list-style: none;
+            counter-reset: sectioncounter
+        }
+        ul > li:before {
+{#            添加列表前的问题#}
+            content: '问题' counter(sectioncounter) ':';
+            counter-increment: sectioncounter;
+            font-size: 18px;
+            color: #d4d4d4;
+        }
+        ul > li:nth-of-type(odd) {
+{#            各行变色#}
+            background-color: #f9f9f9;
+        }
+        #id_name{
+            width: 50%;
+            height: 40px;
+
+        }
+        .questions{
+            margin-top: 20px;
+
+        }
     </style>
 </head>
 <body>
