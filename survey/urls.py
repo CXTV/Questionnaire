@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^add/$', views.add),
     url(r'^del/$', views.dele),
     url(r'^edit/(\d+)/$', views.edit),
+    # url(r'^score/(\d+)/(\d+)/$', views.score()),
+
 ]

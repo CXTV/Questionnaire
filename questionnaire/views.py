@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
+import json
 from . import models
 from django.forms import ModelForm
 from django.forms import widgets as wb
@@ -23,7 +24,6 @@ class Option(ModelForm):
 
 def index(request):
     survey_list = models.Questionnaire.objects.all()
-
     return render(request, 'index.html', {'survey_list': survey_list})
 
 
@@ -96,11 +96,56 @@ def edit(request, nid):
                 temp = {'form': form, 'obj': que, 'option_class': 'hide', 'options': None}
                 if que.type == 2:
                     temp['option_class'] = ''
+
                     def inner_loop(quee):
                         option_list = models.Option.objects.filter(opt2que=quee)
                         for v in option_list:
                             yield {"form": Option(instance=v), 'obj': v}
+
                     temp['options'] = inner_loop(que)
                 yield temp
-
     return render(request, 'edit.html', {'form_list': inner()})
+
+
+# def data(request, nid):
+#     ret = {'status': True, 'msg': None, 'data': None}
+#     try:
+#         ajax_question_list = json.loads(request.body.decode("utf-8"))  # ajax获取前端传来的值
+#         question_id = models.Question.objects.filter(que2quen_id=nid)  # 数据库中的
+#         post_id_list = [i.get('id') for i in ajax_question_list if i.get('id')]
+#         db_id_list = [i.id for i in question_id]
+#
+#         # 哪些id需要删除
+#         del_id_list = set(db_id_list).difference(post_id_list)
+#
+#         # 取出前端发来的问题信息
+#         for item in ajax_question_list:
+#             have_id = item.get('id')
+#             if not have_id in db_id_list:  # 判断更新还是增加
+#                 # 增加
+#                 temp = {
+#                     'name': item.get('name'),
+#                     'type': item.get('type')
+#                 }
+#                 new_question_list = models.Question.objects.create(**temp)
+#                 if item.get('type') == 2:
+#                     for op in item.get('options'):
+#                         new_option_list = models.Option.objects.creat(opt2que=new_question_list, name=op.get('name'),
+#                                                                       score=op.get('score'))
+#             else:
+#                 # 更新
+#                 models.Question.objects.filter(id=nid).update(name=item.get('name'), type=item.get('type'))
+#
+#                 if not item.get('options'):  # 判断有没有option
+#                     models.Option.objects.filter(opt2que=nid).delete()  # 没有则删除
+#                 else:
+#                     models.Option.objects.filter(opt2que=nid).delete()  # 不推荐，需要再次判断，哪些该删除，哪些该增加，取交集同上方法
+#                     for op in item.get('options'):
+#                         models.Option.objects.create(opt2que=nid, name=op.get('name'), score=op.get('score'))
+#
+#         # 删除的
+#         models.Question.objects.first(id__in=del_id_list).delete()
+#     except Exception as e:
+#         ret['msg'] = 'aaa'
+#         ret['status'] = False
+#     return HttpResponse(json.dumps(True))

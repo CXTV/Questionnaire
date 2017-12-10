@@ -2,8 +2,8 @@
 {% block content %}
     <div class="container">
         <div class="row col-md-10 col-md-push-8">
-            <a href=""><button class="btn btn-primary">添加</button></a>
-            <a href=""><button class="btn btn-primary">完成</button></a>
+            <button class="btn btn-primary add_question">添加</button>
+            <button class="btn btn-primary">完成</button>
         </div>
         <div class="question col-md-10 col-md-push-2">
             <div class="row col-md-10 questions" >
@@ -17,7 +17,7 @@
                                 <p><span>问题类型：</span>{{ item.form.type }}<a href="#" class="{{ item.option_class }}">添加选项</a></p>
                                 <ol>
                                     {% for i in item.options %}
-                                        <li id="{{ i.obj.id }}">{{ i.form }}</li>
+                                        <li id="{{ i.obj.id }}">{{ i.form }}<span class="glyphicon glyphicon-remove" aria-hidden="true" style="margin:10px 10px 0 20px;color: gainsboro"></span></li>
                                     {% endfor %}
                                 </ol>
                             </div>
@@ -26,4 +26,17 @@
                 </ul>
             </div>
     </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $(function () {
+        $('.container').on('click', '.add_question', function () {
+            var question_add =  $('.question ul').children().first().clone()
+            question_add.find('li').children('div').attr('id','')
+            $('ul').append(question_add)
+
+        })
+    })
+</script>
 {% endblock %}
