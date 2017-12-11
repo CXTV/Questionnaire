@@ -10,7 +10,7 @@
                 <ul>
                     {% for item in form_list %}
                         <li>
-                        <span class="glyphicon glyphicon-remove pull-right" aria-hidden="true" style="margin:10px 10px 0 0;color: gainsboro"></span>
+                        <span class="glyphicon glyphicon-remove pull-right del_button" aria-hidden="true" style="margin:10px 10px 0 0;color: gainsboro"></span>
             {#            给每个问题添加一个id，方便后面处理#}
                             <div id = {{ item.obj.id }}>
                                 <p><span>问题名称：</span>{{ item.form.name }}</p>
@@ -30,13 +30,54 @@
 
 {% block js %}
 <script>
+//添加问题
+//方法一：有bug
+{#    $(function () {#}
+{#        $('.container').on('click', '.add_question', function () {#}
+{#            var question_add =  $('ul').children().first().clone()#}
+{#            question_add.children('div').attr('id','')#}
+{#            $('ul').append(question_add)#}
+{##}
+{#        })#}
+{#    })#}
+//方法二：
     $(function () {
-        $('.container').on('click', '.add_question', function () {
-            var question_add =  $('.question ul').children().first().clone()
-            question_add.find('li').children('div').attr('id','')
-            $('ul').append(question_add)
+        $('.container').on('click', '.add_question',function () {
+            var question_add = "<li>\n" +
+                "                        <span class=\"glyphicon glyphicon-remove pull-right del_button\" aria-hidden=\"true\" style=\"margin:10px 10px 0 0;color: gainsboro\"></span>\n" +
+                "            \n" +
+                "                            <div id=\"\">\n" +
+                "                                <p><span>问题名称：</span><textarea name=\"name\" cols=\"50\" rows=\"2\" maxlength=\"64\" required=\"\" id=\"id_name\"></textarea></p>\n" +
+                "                                <p><span>问题类型：</span><select name=\"type\" required=\"\" id=\"id_type\">\n" +
+                "  <option value=\"\" selected=\"\">---------</option>\n" +
+                "\n" +
+                "  <option value=\"1\">打分(1~10分)</option>\n" +
+                "\n" +
+                "  <option value=\"2\">单选</option>\n" +
+                "\n" +
+                "  <option value=\"3\">评价</option>\n" +
+                "\n" +
+                "</select><a href=\"#\" class=\"hide\">添加选项</a></p>\n" +
+                "                                <ol>\n" +
+                "                                    \n" +
+                "                                </ol>\n" +
+                "                            </div>\n" +
+                "                        </li>"
 
+            $('ul').append(question_add)
         })
     })
+
+//删除问题
+$(function () {
+    $('.container').on('click','.glyphicon-remove',function () {
+        $(this).parent().remove()
+    })
+
+//
+
+
+
+})
 </script>
 {% endblock %}
